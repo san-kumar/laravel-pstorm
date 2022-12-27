@@ -1,0 +1,47 @@
+{
+  "name": "san-kumar/laravel-pstorm",
+  "description": "Laravel Pstorm generator: Generate Pstorm for any db table with the pstorm:generate command.",
+  "keywords": [
+    "artisan",
+    "laravel",
+    "pstorm",
+    "view",
+    "templates",
+    "blade"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "San Kumar",
+      "email": "sanchitbh@gmail.com",
+      "homepage": "https://dayandnight.in"
+    }
+  ],
+  "require": {
+    "php": "^8.0",
+    "barryvdh/laravel-debugbar": "^3.7"
+  },
+  "require-dev": {
+    "laravel/framework": "^8.0 || ^9.0",
+    "phpunit/phpunit": "^9.0 || ^10.0",
+    "mockery/mockery": "^1.4",
+    "orchestra/testbench": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "San\\Pstorm\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "San\\Pstorm\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "San\\Pstorm\\ServiceProvider"
+      ]
+    }
+  }
+}
