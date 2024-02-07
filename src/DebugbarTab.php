@@ -43,7 +43,12 @@ class DebugbarTab {
     }
 
     protected function toPstormUrl($path) {
-        return sprintf('phpstorm://open?file=%s', $path);
+        // Normalize the path to use the platform-specific directory separator
+        $normalizedPath = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $path);
+        // Escape the path for windows
+        $escapedPath = str_replace('\\', '\\\\', $normalizedPath);
+
+        return sprintf('phpstorm://open?file=%s&line=0', $escapedPath);
     }
 
     /**
