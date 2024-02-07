@@ -5,7 +5,7 @@ namespace San\Pstorm;
 use Barryvdh\Debugbar\LaravelDebugbar;
 use Closure;
 use Illuminate\Http\Request;
-use \Illuminate\Http\Response;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 
@@ -13,9 +13,18 @@ class DebugbarTab {
     protected $views = [];
 
     public function __construct() {
+        $this->viewSet = []; // Auxiliary set for fast lookup
+
         Event::listen('composing*', function ($eventName, array $data) {
             $viewName = $data[0]->getName();
-            $this->views[] = ['name' => $viewName, 'url' => $this->toPstormUrl(\View::getFinder()->find($viewName))];
+
+            // Check if the view is already in the set and process it only once
+            if (!isset($this->viewSet[$viewName])) {
+                // Add the view to the views array
+                $this->views[] = ['name' => $viewName, 'url' => $this->toPstormUrl(\View::getFinder()->find($viewName))];
+                // Mark the view as added in the set
+                $this->viewSet[$viewName] = true;
+            }
         });
     }
 
@@ -34,7 +43,12 @@ class DebugbarTab {
     }
 
     protected function toPstormUrl($path) {
-        return sprintf('phpstorm://open?file=%s', $path);
+        // Normalize the path to use the platform-specific directory separator
+        $normalizedPath = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $path);
+        // Escape the path for windows
+        $escapedPath = str_replace('\\', '\\\\', $normalizedPath);
+
+        return sprintf('phpstorm://open?file=%s&line=0', $escapedPath);
     }
 
     /**
